@@ -1680,6 +1680,12 @@ static int test21 (void) {
 struct tagbstring is = bsStatic ("is");
 struct tagbstring ng = bsStatic ("ng");
 struct tagbstring commas = bsStatic (",,,,");
+struct tagbstring delim = bsStatic ("aa");
+struct tagbstring beginWithDelim = bsStatic ("aaabcdaa1");
+struct tagbstring endWithDelim = bsStatic ("1aaabcdaa");
+struct tagbstring conseqDelim = bsStatic ("1aaaa1");
+struct tagbstring oneCharLeft = bsStatic ("aaaaaaa");
+struct tagbstring allDelim = bsStatic ("aaaaaa");
 int ret = 0;
 
 	printf ("TEST: struct bstrList * bsplit (const_bstring str, unsigned char splitChar);\n");
@@ -1706,6 +1712,16 @@ int ret = 0;
 	ret += test21_1 (&shortBstring, &emptyBstring, 5);
 	ret += test21_1 (&longBstring, &is, 3);
 	ret += test21_1 (&longBstring, &ng, 5);
+
+	/* corner cases */
+	ret += test21_1 (&shortBstring, &emptyBstring, shortBstring.slen);
+	ret += test21_1 (&emptyBstring, &delim, 1);
+	ret += test21_1 (&delim, &delim, 2);
+	ret += test21_1 (&beginWithDelim, &delim, 3);
+	ret += test21_1 (&endWithDelim, &delim, 3);
+	ret += test21_1 (&conseqDelim, &delim, 3);
+	ret += test21_1 (&oneCharLeft, &delim, 4);
+	ret += test21_1 (&allDelim, &delim, 4);
 
 	if (0 == ret) {
 		struct bstrList * l;

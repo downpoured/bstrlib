@@ -2768,12 +2768,16 @@ int i, p, ret;
 	if (splitStr->slen == 1)
 		return bsplitcb (str, splitStr->data[0], pos, cb, parm);
 
-	for (i=p=pos; i <= str->slen - splitStr->slen; i++) {
+	i = p = pos;
+	while (i <= str->slen - splitStr->slen) {
 		if (0 == bstr__memcmp (splitStr->data, str->data + i,
 		                       splitStr->slen)) {
 			if ((ret = cb (parm, p, i - p)) < 0) return ret;
 			i += splitStr->slen;
 			p = i;
+		}
+		else {
+			i++;
 		}
 	}
 	if ((ret = cb (parm, p, str->slen - p)) < 0) return ret;
